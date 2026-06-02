@@ -3,6 +3,9 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import type { Employee } from "../types/employee"
 import { states } from "../data/states"
+import Modal from "../components/Modal"
+import SelectInput from "../components/SelectInput"
+import { department } from "../data/departement"
 
 const initialEmployee: Employee = {
     firstName: "",
@@ -19,7 +22,12 @@ const initialEmployee: Employee = {
 function CreateEmployee() {
 
     const [employee, setEmployee] = useState<Employee>(initialEmployee);
-    const [successMessage, setSuccessMessage] = useState("")
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const stateOptions = states.map((state) => ({
+        label: state.name,
+        value: state.abbreviation
+    }))
 
     function handleChange(
         event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -32,7 +40,9 @@ function CreateEmployee() {
         }))
     }
 
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    function handleSubmit(
+        event: FormEvent<HTMLFormElement>
+    ) {
         event.preventDefault()
 
         const employeeFromStorage = localStorage.getItem("employees")
@@ -42,7 +52,7 @@ function CreateEmployee() {
         localStorage.setItem("employees", JSON.stringify(employees))
 
         setEmployee(initialEmployee)
-        setSuccessMessage("Employee created successfully")
+        setIsModalOpen(true)
     }
 
     return (
@@ -54,8 +64,6 @@ function CreateEmployee() {
             <Link to="/employees"> View Current Employees </Link>
 
             <h2> Create Employee </h2>
-
-            {successMessage && <p className="success-message"> {successMessage} </p>}
 
             <form id="create-employee" onSubmit={handleSubmit}>
                 <label htmlFor="firstName"> First Name </label>
@@ -79,33 +87,21 @@ function CreateEmployee() {
                     <label htmlFor="city"> City </label>
                     <input type="city" id="city" name="city" value={employee.city} onChange={handleChange} required />
 
-                    <label htmlFor="state"> State </label>
-                    <select id="state" name="state" value={employee.state} onChange={handleChange} required>
-                        <option value="">
-                            Select a state
-                        </option>
-                        {states.map((state) => (
-                            <option key={state.abbreviation} value={state.abbreviation}>
-                                {state.name}
-                            </option>
-                        ))}
-                    </select>
+                    <SelectInput id="state" name="state" label="State" value={employee.state} onChange={handleChange} options={stateOptions} placeholder="Select a state" required />
 
                     <label htmlFor="zipCode"> Zip Code </label>
                     <input type="number" id="zipCode" name="zipCode" value={employee.zipCode} onChange={handleChange} required />
                 </fieldset>
 
-                <label htmlFor="department"> Department </label>
-                <select id="department" name="department" value={employee.department} onChange={handleChange} required>
-                    <option value="Sales"> Sales </option>
-                    <option value="Marketing"> Marketing </option>
-                    <option value="Engineering"> Engineering </option>
-                    <option value="Human Resources"> Human Resources </option>
-                    <option value="Legal"> Legal </option>
-                </select>
+                <SelectInput id="department" name="department" label="Department" value={employee.department} onChange={handleChange} options={department} />
 
                 <button type="submit"> Save </button>
             </form>
+
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <p> Employee Created </p>
+            </Modal>
+
         </main>
     )
 }

@@ -67,3 +67,64 @@ td {
 th {
   background-color: #f2f2f2;
 }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgb(0 0 0 / 65%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  min-height: 64px;
+  padding: 24px 32px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #111111;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 35%);
+}
+
+.modal-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.modal-body p {
+  margin: 0;
+  color: #111111;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-close-button:hover {
+  background-color: #333333;
+}
+
+.select-input-field {
+  max-width: 215px;
+  width: 80%;
+}
