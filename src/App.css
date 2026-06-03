@@ -128,3 +128,9 @@ th {
   max-width: 215px;
   width: 80%;
 }
+
+.error-message {
+  color: #d32f5f;
+  font-weight: 700;
+  text-align: center;
+}

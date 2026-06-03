@@ -1,18 +1,8 @@
 import { Link } from "react-router-dom"
-import type { Employee } from "../types/employee"
-
-function getEmployeesFromStorage(): Employee[] {
-    const employeesFromStorage = localStorage.getItem('employees')
-
-    if (!employeesFromStorage) {
-        return []
-    }
-
-    return JSON.parse(employeesFromStorage) as Employee[]
-}
+import { useAppSelector } from "../hooks/reduxHooks"
 
 function EmployeeList() {
-    const employees = getEmployeesFromStorage()
+    const employees = useAppSelector((state) => state.employees.employees)
 
     return (
         <main className="container">

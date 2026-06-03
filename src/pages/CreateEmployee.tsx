@@ -6,6 +6,15 @@ import { states } from "../data/states"
 import Modal from "../components/Modal"
 import SelectInput from "../components/SelectInput"
 import { department } from "../data/departement"
+import { useAppDispatch } from "../hooks/reduxHooks"
+import { addEmployee } from "../store/employeeSlice"
+
+const MinimumEmployeeAge = 18
+
+const NameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,50}$/
+const CityRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,80}$/
+const StreetRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,100}$/
+const ZipCodeRegex = /^\d{8}$/;
 
 const initialEmployee: Employee = {
     firstName: "",
@@ -17,41 +26,100 @@ const initialEmployee: Employee = {
     state: "",
     zipCode: "",
     department: ""
-};
+}
+
+function getAgeAtDate(dateOfBirth: string, referenceDate: string): number {
+    const birthDate = new Date(dateOfBirth)
+    const startDate = new Date(referenceDate)
+
+    let age = startDate.getFullYear() - birthDate.getFullYear()
+
+    const hasBirthdayPassed =
+        startDate.getMonth() > birthDate.getMonth() ||
+        (startDate.getMonth() === birthDate.getMonth() && 
+        startDate.getDate() >= birthDate.getDate())
+
+    if (!hasBirthdayPassed) {
+        age -= 1
+    }
+
+    return age
+}
+
+function isOldEnoughAtStartDate( dateOfBirth: string, startDate: string, minimumAge: number ): boolean {
+    return getAgeAtDate(dateOfBirth, startDate) >= minimumAge
+}
+
+function validateEmployeeFields(employee: Employee): string {
+
+    if (!NameRegex.test(employee.firstName.trim())) {
+        return "First name must contain only letters at least 2, spaces, hyphens or apostrophes"
+    }
+
+    if (!NameRegex.test(employee.lastName.trim())) {
+        return "Last name must contain only letters at least 2, spaces, hyphens or apostrophes"
+    }
+
+    if (!CityRegex.test(employee.city.trim())) {
+        return "City must contain only letters at least 2, spaces, hyphens or apostrophes"
+    }
+
+    if (!StreetRegex.test(employee.street.trim())) {
+        return "Street must contain only letters at least 2, spaces, hyphens, apostrophes, commas or periods"
+    }
+
+    if (!ZipCodeRegex.test(employee.zipCode.trim())) {
+        return "Zip code must contain exactly 8 digits"
+    }
+
+    return ""
+}
 
 function CreateEmployee() {
 
+    const dispatch = useAppDispatch()
+
     const [employee, setEmployee] = useState<Employee>(initialEmployee);
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
 
     const stateOptions = states.map((state) => ({
         label: state.name,
         value: state.abbreviation
     }))
 
-    function handleChange(
-        event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) {
+    function handleChange( event: ChangeEvent<HTMLInputElement | HTMLSelectElement> ) {
         const { name, value } = event.target
 
         setEmployee((currentEmployee) => ({
             ...currentEmployee,
             [name]: value
         }))
+
+        setErrorMessage("")
     }
 
-    function handleSubmit(
-        event: FormEvent<HTMLFormElement>
-    ) {
+    function handleSubmit( event: FormEvent<HTMLFormElement> ) {
         event.preventDefault()
 
-        const employeeFromStorage = localStorage.getItem("employees")
-        const employees: Employee[] = employeeFromStorage ? JSON.parse(employeeFromStorage) : []
-        employees.push(employee)
+        const validationError = validateEmployeeFields(employee)
 
-        localStorage.setItem("employees", JSON.stringify(employees))
+        if (validationError) {
+            setErrorMessage(validationError)
+            setIsModalOpen(false)
+            return
+        }
 
+        if (!isOldEnoughAtStartDate(employee.dateOfBirth, employee.startDate, MinimumEmployeeAge)) {
+            setErrorMessage(`Employee must be at least ${MinimumEmployeeAge} years old on the start date`)
+            setIsModalOpen(false)
+            return
+        }
+
+        dispatch(addEmployee(employee))
+        
         setEmployee(initialEmployee)
+        setErrorMessage("")
         setIsModalOpen(true)
     }
 
@@ -64,6 +132,8 @@ function CreateEmployee() {
             <Link to="/employees"> View Current Employees </Link>
 
             <h2> Create Employee </h2>
+
+            {errorMessage && <p className="error-message"> {errorMessage} </p>}
 
             <form id="create-employee" onSubmit={handleSubmit}>
                 <label htmlFor="firstName"> First Name </label>
@@ -90,7 +160,7 @@ function CreateEmployee() {
                     <SelectInput id="state" name="state" label="State" value={employee.state} onChange={handleChange} options={stateOptions} placeholder="Select a state" required />
 
                     <label htmlFor="zipCode"> Zip Code </label>
-                    <input type="number" id="zipCode" name="zipCode" value={employee.zipCode} onChange={handleChange} required />
+                    <input type="text" id="zipCode" name="zipCode" value={employee.zipCode} onChange={handleChange} inputMode="numeric" pattern="\d{8}" maxLength={8} required />
                 </fieldset>
 
                 <SelectInput id="department" name="department" label="Department" value={employee.department} onChange={handleChange} options={department} />
