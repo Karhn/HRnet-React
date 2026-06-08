@@ -1,6 +1,6 @@
 import type { SelectOption } from "../components/SelectInput";
 
-export const department: SelectOption[] = [
+export const departments: SelectOption[] = [
     { label: "Sales", value: "Sales" },
     { label: "Marketing", value: "Marketing" },
     { label: "Engineering", value: "Engineering" },

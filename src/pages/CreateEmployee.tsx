@@ -5,16 +5,26 @@ import type { Employee } from "../types/employee"
 import { states } from "../data/states"
 import Modal from "../components/Modal"
 import SelectInput from "../components/SelectInput"
-import { department } from "../data/departement"
+import { departments } from "../data/departement"
 import { useAppDispatch } from "../hooks/reduxHooks"
 import { addEmployee } from "../store/employeeSlice"
 
 const MinimumEmployeeAge = 18
 
-const NameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,50}$/
-const CityRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,80}$/
-const StreetRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,100}$/
-const ZipCodeRegex = /^\d{8}$/;
+const FrenchLetters = "A-Za-zÀ-ÿ"
+
+const NameRegex = new RegExp(
+  `^[${FrenchLetters}]+(?:[ '-][${FrenchLetters}]+)*$`
+);
+
+const CityRegex = new RegExp(
+  `^[${FrenchLetters}]+(?:[ '-][${FrenchLetters}]+)*$`
+);
+
+const StreetRegex = /^[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9 .,'-]{1,99}$/
+
+const ZipCodeRegex = /^\d{5,8}$/;
+
 
 const initialEmployee: Employee = {
     firstName: "",
@@ -25,7 +35,7 @@ const initialEmployee: Employee = {
     city: "",
     state: "",
     zipCode: "",
-    department: ""
+    department: "Sales"
 }
 
 function getAgeAtDate(dateOfBirth: string, referenceDate: string): number {
@@ -160,10 +170,10 @@ function CreateEmployee() {
                     <SelectInput id="state" name="state" label="State" value={employee.state} onChange={handleChange} options={stateOptions} placeholder="Select a state" required />
 
                     <label htmlFor="zipCode"> Zip Code </label>
-                    <input type="text" id="zipCode" name="zipCode" value={employee.zipCode} onChange={handleChange} inputMode="numeric" pattern="\d{8}" maxLength={8} required />
+                    <input type="text" id="zipCode" name="zipCode" value={employee.zipCode} onChange={handleChange} inputMode="numeric" pattern="\d{5,8}" maxLength={8} required />
                 </fieldset>
 
-                <SelectInput id="department" name="department" label="Department" value={employee.department} onChange={handleChange} options={department} />
+                <SelectInput id="department" name="department" label="Department" value={employee.department} onChange={handleChange} options={departments} />
 
                 <button type="submit"> Save </button>
             </form>
