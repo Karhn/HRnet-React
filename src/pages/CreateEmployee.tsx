@@ -79,7 +79,7 @@ function validateEmployeeFields(employee: Employee): string {
     }
 
     if (!ZipCodeRegex.test(employee.zipCode.trim())) {
-        return "Zip code must contain exactly 8 digits"
+        return "Zip code must contain between 5 and 8 digits"
     }
 
     return ""
@@ -170,7 +170,7 @@ function CreateEmployee() {
                     <SelectInput id="state" name="state" label="State" value={employee.state} onChange={handleChange} options={stateOptions} placeholder="Select a state" required />
 
                     <label htmlFor="zipCode"> Zip Code </label>
-                    <input type="text" id="zipCode" name="zipCode" value={employee.zipCode} onChange={handleChange} inputMode="numeric" pattern="\d{5,8}" maxLength={8} required />
+                    <input type="text" id="zipCode" name="zipCode" value={employee.zipCode} onChange={handleChange} inputMode="numeric" maxLength={8} required />
                 </fieldset>
 
                 <SelectInput id="department" name="department" label="Department" value={employee.department} onChange={handleChange} options={departments} />
