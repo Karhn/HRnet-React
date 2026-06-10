@@ -5,5 +5,5 @@ export const departments: SelectOption[] = [
     { label: "Marketing", value: "Marketing" },
     { label: "Engineering", value: "Engineering" },
     { label: "Human Resources", value: "Human Resources" },
-    { label: "c", value: "Legal" },
+    { label: "Legal", value: "Legal" },
 ]

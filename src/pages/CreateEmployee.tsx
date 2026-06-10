@@ -158,7 +158,7 @@ function CreateEmployee() {
                 <label htmlFor="startDate"> Start Date </label>
                 <input type="date" id="startDate" name="startDate" value={employee.startDate} onChange={handleChange} required />
 
-                <fieldset>
+                <fieldset className="address">
                     <legend> Address </legend>
 
                     <label htmlFor="street"> Street </label>

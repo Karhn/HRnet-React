@@ -1,36 +1,94 @@
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  border: none;
+  width: 100%;
+}
+
 body {
+  border: none;
   margin: 0;
+  min-height: 100vh;
   font-family: Arial, sans-serif;
+  color: #1F2933;
+  background: 
+    radial-gradient(circle at top left, rgba(147, 173, 24, 0.18), transparent 34rem),
+    linear-gradient(135deg, #F8FAF3 0%, #EEF4D7);
+}
+
+a {
+  color: #3F4F12;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.title h1,
+.container h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.2rem, 3vw, 3.5rem);
+  color: #3F4F12;
+  letter-spacing: -0.04rem;
 }
 
 .container {
-  width: 90%;
-  max-width: 900px;
-  margin: 40px auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: min(1150px, calc(100% - 2rem));
+  margin: 1rem auto;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(217, 226, 204, 0.90);
+  border-radius: 18px;
+  box-shadow: 0 18px 25px rgba(31, 41, 51, 0.12);
+}
+
+.container > a {
+  display: inline-flex;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  margin: 0 0 1.5rem;
+  text-align: center;
+  color: #3F4F12;
+  font-size: 1.8rem;
 }
 
 form {
+  width: min(620px, 100%);
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  max-width: 400px;
+  gap: 0.2rem;
 }
 
 label {
   display: block;
   margin-top: 1rem;
   margin-bottom: 10px;
+  color: #667085;
+  font-weight: 600;
 }
+
+form input,
+form select {
+  background-color: #F8FAF3;
+  color: #1F2933;
+  border: 1px solid #b7c58a;
+}
+
+.form-input::placeholder {
+  color: #7A8465;
+} 
 
 input,
 select,
@@ -42,81 +100,87 @@ button {
 .address {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   margin-top: 10px;
 }
 
-.success-message {
-  color: green;
-  font-weight: bold;
+/* Adress section */
+
+fieldset.address {
+  gap: 0rem;
+  border: 1px solid #b7c58a;
+  border-radius: 14px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 24px 0;
+form label,
+.select-input label,
+fieldset.address legend {
+  color: #3f4f12;
+  font-weight: 700;
 }
 
-th,
-td {
-  border: 1px solid #cccccc;
-  padding: 8px;
-  text-align: left;
+/* Inputs inside address */
+
+fieldset.address input,
+fieldset.address select {
+  max-width: 215px;
+  margin: 0 auto;
 }
 
-th {
-  background-color: #f2f2f2;
+/* Save button */
+
+button[type="submit"]:hover {
+  background-color: #93ad18;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(63, 79, 18, 0.25);
 }
+
+
+/* Modal */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background-color: rgb(0 0 0 / 65%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.64);
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
   position: relative;
-  width: 90%;
-  max-width: 500px;
-  min-height: 64px;
-  padding: 24px 32px;
+  width: min(460px, 100%);
+  padding: 2rem;
   border-radius: 8px;
   background-color: #ffffff;
-  color: #111111;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 35%);
+  color: #1F2933;
+  box-shadow: 0 18px 45px rgba(31, 41, 51, 0.12);
+  text-align: center;
 }
 
 .modal-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 800;
 }
 
 .modal-body p {
   margin: 0;
-  color: #111111;
+  color: #3F4F12;
 }
 
 .modal-close-button {
   position: absolute;
-  top: -16px;
-  right: -16px;
+  top: -14px;
+  right: -14px;
   width: 34px;
   height: 34px;
   border: none;
   border-radius: 50%;
-  background-color: #000000;
+  background-color: #3F4F12;
   color: #ffffff;
-  font-size: 24px;
-  line-height: 1;
+  font-size: 18px;
   cursor: pointer;
 }
 
@@ -129,8 +193,133 @@ th {
   width: 80%;
 }
 
+.select-input:last-of-type {
+  margin-bottom: 1rem;
+}
+
+/* Validation & Error message */
+
 .error-message {
-  color: #d32f5f;
-  font-weight: 700;
+  width: min(620px, 100%);
+  margin: 0 auto 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background: rgba(198, 40, 40, 0.09);
+  color: #C62828;
+  font-weight: 800;
   text-align: center;
+}
+
+.success-message {
+  color: #2E7D32;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Data table package */
+
+.data-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.data-table-controls,
+.data-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+  color: #667085;
+  font-weight: 700;
+}
+
+.data-table-controls label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.data-table-controls input,
+.data-table-controls select {
+  width: auto;
+  min-width: 90px;
+}
+
+.data-table-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.data-table-table th,
+.data-table-table td {
+  padding: 0.9rem 0.85rem;
+  border-bottom: 1px solid #D9E2CC;
+  text-align: left;
+}
+
+.data-table-table th {
+  background: #3F4F12;
+  color: #000000;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.data-table-table th:nth-child(3),
+.data-table-table td:nth-child(3),
+.data-table-table th:nth-child(5),
+.data-table-table td:nth-child(5) {
+  white-space: nowrap;
+}
+
+.data-table-table tbody tr:nth-child(even) {
+  background: #f8faf3;
+}
+
+.data-table-table tbody tr:hover {
+  background: #EEF4D7;
+}
+
+.data-table-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.data-table-pagination button {
+  min-height: 38px;
+  padding: 0.5rem 0.85rem;
+  background: #ffffff;
+  color: #3F4F12;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.data-table-pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@media (max-width: 720px) {
+  .container {
+    margin: 1rem auto;
+    padding: 1.25rem;
+  }
+
+  .data-table-controls,
+  .data-table-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .data-table-controls label {
+    justify-content: space-between;
+  }
+
+  .data-table-controls input,
+  .data-table-controls select {
+    width: 100%;
+  }
 }
