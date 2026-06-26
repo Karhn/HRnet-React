@@ -2,6 +2,7 @@
 
 describe("Employee List page", () => {
   beforeEach(() => {
+    cy.viewport(1440, 1200);
     cy.visit("http://localhost:5173");
 
     cy.get("#firstName").type("John");
